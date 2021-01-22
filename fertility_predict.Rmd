@@ -1,0 +1,39 @@
+---
+title: "Swiss Fertility Shiny App Instructions"
+author: "M.N.L"
+date: "1/21/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      warning = FALSE, # does not show warnings
+                      message = FALSE, # does show messages
+                     error = FALSE) # do not interrupt code
+```
+
+## Background Information
+
+The fertility_predict shiny app aims to predict the output variable y, the standardized fertility measure, based on the slider inputs. The data is obtained from the Swiss data set. The data set consists of a standardized fertility measure and 5 economic indicators for 47 provinces in French speaking provinces of Switzerland
+
+- **SliderE**: This is the percentage of draftees who received education beyond primary school
+- **SliderA**: This is the percentage of males whose occupation is Agriculture.
+- **pred1**: Prediction value for fertility measure based on the education  predictor variable.
+-**pred2**:Prediction value for fertility measure based on the education and agriculture predictor variables.
+
+## Help Instructions
+
+- To predict **pred1**,  move *sliderE* to the right and left to select desired value.
+- Then check plot 1 to see the movement of the point in plot1 and the calculated value in the text below the plots.
+- To predict **pred2**, move *sliderE* and/or *slider A* to select desired values. 
+- Then check Plot 2 to see the movement of the point in plot2 and the calculated value in the text below the plots.
+
+
+
+```{r UIshinyap}
+
+```
+
+
+
+
