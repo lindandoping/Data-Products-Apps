@@ -1,0 +1,99 @@
+---
+title: "Swiss Fertility Prediction"
+author: "M.N.L"
+date: "1/21/2021"
+output: slidy_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      warning = FALSE, # does not show warnings
+                      message = FALSE, # does show messages
+                     error = FALSE) # do not interrupt code
+
+```
+
+## Swiss Fertility Prediction Shiny App
+
+- Fertility_predict shiny app aims to determine the prediction of the standardized fertility measure in the swiss data set based on two models.
+
+- First prediction is obtained using the linear model of the outcome variable and the Education predictor variable
+
+- Second prediction is obtained using the linear model of the outcome variable and both the Education and Agriculture variables
+
+-   The Shiny app consist of a main page and help file page. The main page consist of the slider input, the plots of the predictor and outcome variables and the calculated predicted fertility measure
+
+-   The point on the plots and the calculated fertility measure is reactive to the values in the slider input
+
+-   The help file provides background information about the app, and instructions on how to use the app.
+
+
+## ShinyApp
+
+The link to the app is:
+https://mane1stats.shinyapps.io/Fertility_predict/
+
+Below is a snapshot of showing the slider inputs and one of the plots
+![Alt text](/Users/mndoping/Desktop/DataScience/myapp.png)
+
+## Sample UI Code
+
+A sample of the UI code is seen below.
+```{r UIcode, echo=TRUE, eval=FALSE}
+# Define UI for application that plots a model to determine Fertility prediction
+shinyUI(fluidPage(
+
+    # Application title
+    titlePanel("Predicting Fertility from %Education & %Agriculture "),
+
+    # Sidebar with a slider input for number of bins
+    tabsetPanel(
+        tabPanel("Home",
+    sidebarLayout(
+        sidebarPanel(
+            sliderInput("sliderE", "Indicate % of educated drafte", 0, 100, 
+                        value=45),
+            sliderInput("sliderA", "% of males whose occupation is Agriculture", 0, 100, 
+                        value =60),
+       
+        ),
+        # Show a plot of the generated distribution
+        mainPanel(
+            plotOutput("FertilityPlot"),
+            h3("Predicted Fertility from model 1 is:"),
+            textOutput("pred1"),
+            h3("Predicted Fertility from model 2 is:"),
+            textOutput("pred2")
+        )
+```
+
+
+## Sample Server Code
+
+A sample of the server code is seen below.
+```{r Servercode, echo=TRUE, eval=FALSE}
+
+       # Define server logic required to draw prediction plots and output values 
+shinyServer(function(input, output) {
+
+        # Calculating the models
+        model1<-lm(Fertility~Education, data=swiss)
+        model2<-lm(Fertility~Education+Agriculture, data=swiss)
+
+        # Calculating prediction based on slider input
+        model1pred<-reactive({
+            EduInput<-input$sliderE
+            predict(model1, newdata=data.frame(Education = EduInput))  
+        })
+        model2pred<-reactive({
+            EduInput<-input$sliderE
+            AgricInput<-input$sliderA
+            predict(model2, newdata=data.frame(Education = EduInput,
+                                               Agriculture = AgricInput))  
+        })
+            
+         #Plotting Variables using GGplot
+        output$FertilityPlot <- renderPlot({
+                   EduInput<-input$sliderE
+                   AgricInput<-input$sliderA
+                   model2<-lm(Fertility~Education+Agriculture, data=swiss)
